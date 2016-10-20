@@ -1,6 +1,9 @@
 package com.app.timtac.easysleep;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,10 +15,16 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final boolean AUTO_HIDE = true;
+    private boolean AUTO_HIDE = true;
+
+    // UI
+    private View root;
+    private TextView start;
+    private LinearLayout linearLayout;
 
 
 
@@ -28,15 +37,16 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.backgroundButton);
+        linearLayout = (LinearLayout)findViewById(R.id.backgroundButton);
+        start = (TextView)findViewById(R.id.playButton);
+        root = linearLayout.getRootView();
 
-        linearLayout.setOnClickListener(new View.OnClickListener() {
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestWindowFeature(Window.FEATURE_NO_TITLE);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                setContentView(R.layout.activity_main);
+                Toast.makeText(getApplicationContext(),"CLIC",Toast.LENGTH_SHORT).show();
+                root.setBackgroundColor(Color.parseColor("#ff0000"));
+
             }
         });
 
