@@ -1,18 +1,22 @@
 package com.app.timtac.easysleep;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,9 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     // UI
     private View root;
-    private TextView start;
+    private ImageButton start;
     private LinearLayout linearLayout;
-
 
 
     @Override
@@ -38,14 +41,35 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         linearLayout = (LinearLayout)findViewById(R.id.backgroundButton);
-        start = (TextView)findViewById(R.id.playButton);
+        start = (ImageButton)findViewById(R.id.playButton);
         root = linearLayout.getRootView();
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"CLIC",Toast.LENGTH_SHORT).show();
-                root.setBackgroundColor(Color.parseColor("#ff0000"));
+                root.setBackgroundColor(Color.parseColor("#D73612"));
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (Settings.System.canWrite(getApplicationContext())) {
+                        Settings.System.putInt(
+                                getApplicationContext().getContentResolver(),
+                                Settings.System.SCREEN_BRIGHTNESS,
+                                255
+                        );
+                    }
+                    else {
+                        Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                        intent.setData(Uri.parse("package:" + MainActivity.this.getPackageName()));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                }
+
+                ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null) {
+                    actionBar.hide();
+                }
+
 
             }
         });
